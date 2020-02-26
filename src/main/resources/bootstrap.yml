@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: CONFIG
+      profile: dev
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+zuul:
+  routes:
+    aaaaaaa:
+      path: /myTest/**
+      serviceId: product
+      #致空敏感头（传递cookie）
+      sensitiveHeaders:
+    #简介写法
+#    product: /myTest/**
+  #排除某些路由
+  ignored-patterns:
+    - /**/product/listForOrder
+  #全部服务致空敏感头（都可以传递cookie）
+  sensitive-headers:
+  host:
+    #HTTP连接超时要比Hystrix的大
+    connect-timeout-millis: 15000
+    #socket超时
+    socket-timeout-millis: 60000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: routes
